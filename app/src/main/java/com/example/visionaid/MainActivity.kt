@@ -17,6 +17,8 @@ import android.util.Log
 import android.util.Size
 import android.view.Surface
 import android.view.TextureView
+import android.view.View
+import android.widget.Button
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -32,6 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
 import androidx.core.app.AppComponentFactory
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentTransaction
 import com.example.visionaid.ui.theme.VisionAidTheme
 import java.nio.ByteBuffer
 
@@ -55,7 +58,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
        setContentView(R.layout.activity_main)
-
         textureView = findViewById<TextureView>(R.id.textureView)
 
 
@@ -65,6 +67,15 @@ class MainActivity : AppCompatActivity() {
         } else {
             openCamera()
         }
+
+        val contact = findViewById<Button>(R.id.contact)
+        contact.setOnClickListener(View.OnClickListener {
+            val fragmentTransaction: FragmentTransaction = supportFragmentManager.beginTransaction()
+            fragmentTransaction.replace(R.id.contact_list, Contacts())
+            fragmentTransaction.addToBackStack(null)
+            fragmentTransaction.commit()
+        }
+        )
     }
 
     private fun openCamera() {
