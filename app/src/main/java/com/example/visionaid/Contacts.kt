@@ -93,7 +93,7 @@ class Contacts : Fragment() {
             cursor.close()
         }
 
-        val adapter = ArrayAdapter(requireContext(),R.layout.contact_list, contactsList)
+        val adapter = ArrayAdapter(requireContext(),R.layout.contact_list,R.id.name, contactsList)
         contactsListView.adapter = adapter
     }
 
