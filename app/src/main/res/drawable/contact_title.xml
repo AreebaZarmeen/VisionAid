@@ -1,0 +1,14 @@
+<!-- res/drawable/rounded_button1.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:top="0dp" android:left="0dp" android:right="0dp" android:bottom="5dp">
+        <shape android:shape="rectangle">
+            <!-- Gradient background -->
+            <gradient
+                android:startColor="#31767C"
+                android:endColor="#C5E0E2"
+                android:angle="240"/>
+        </shape>
+    </item>
+
+</layer-list>
