@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract
 import androidx.fragment.app.Fragment
@@ -21,6 +22,7 @@ class Contacts : Fragment() {
     private lateinit var contactsListView: ListView
     private val contactsList = ArrayList<String>()
     private val contactsMap = HashMap<String, String>()
+    private val selectedContacts = mutableListOf<Pair<String, String>>()
 
     private val REQUEST_CODE_CONTACT = 1
     private val REQUEST_CODE_CALL = 2
@@ -31,7 +33,6 @@ class Contacts : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_contacts, container, false)
-
         contactsListView = view.findViewById(R.id.contact_list)
         checkPermissions()
 
@@ -43,7 +44,14 @@ class Contacts : Fragment() {
 
         return view
     }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
+        // Change the status bar color
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            requireActivity().window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.statusBar)
+        }
+    }
     private fun checkPermissions() {
         if (ContextCompat.checkSelfPermission(requireContext(), "android.permission.READ_CONTACTS") != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(requireActivity(), arrayOf("android.permission.READ_CONTACTS"), REQUEST_CODE_CONTACT)
@@ -92,8 +100,20 @@ class Contacts : Fragment() {
             }
             cursor.close()
         }
-
-        val adapter = ArrayAdapter(requireContext(),R.layout.contact_list,R.id.name, contactsList)
+        val showCheckBox=true
+        val adapter = CustomAdapter(requireContext(), contactsList, showCheckBox,
+            onContactCheckedChange = { contactName, isChecked ->
+                val phoneNumber = contactsMap[contactName]
+                if (isChecked && phoneNumber != null) {
+                    selectedContacts.add(contactName to phoneNumber)
+                } else {
+                    selectedContacts.remove(contactName to phoneNumber)
+                }
+            },
+            onContactClick = { contactName ->
+                makeCall(contactsMap[contactName])
+            }
+        )
         contactsListView.adapter = adapter
     }
 

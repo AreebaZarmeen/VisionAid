@@ -2,23 +2,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/contact"
     android:fitsSystemWindows="false"
     tools:context=".Contacts">
 
 
     <ListView
         android:id="@+id/contact_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="474dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="137dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="120dp"
         android:divider="@android:color/transparent"
         android:dividerHeight="8dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginTop="137dp"
-        android:layout_marginBottom="0dp"
         android:paddingLeft="5dp" />
 
     <TextView
@@ -28,9 +28,9 @@
         android:background="@drawable/contact_title"
         android:fontFamily="serif"
         android:gravity="center"
-        android:text="Contacts"
+        android:text="Emergency Contacts"
         android:textColor="@color/white"
         android:textFontWeight="600"
-        android:textSize="45sp"
+        android:textSize="30sp"
         android:textStyle="italic" />
 </RelativeLayout>

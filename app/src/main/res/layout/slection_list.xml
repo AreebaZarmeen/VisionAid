@@ -5,13 +5,21 @@
 
     <TextView
         android:id="@+id/name"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/checkBox"
         android:background="@color/contact"
         android:paddingStart="10dp"
         android:paddingTop="15dp"
         android:text="Contact Name"
         android:textSize="20sp" />
 
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="50dp"
+        android:layout_height="60dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:background="@color/contact" />
 </RelativeLayout>
