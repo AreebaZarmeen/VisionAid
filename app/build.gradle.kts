@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace = "com.example.visionaid"
-    compileSdk = 34
+    compileSdk = 34 // Keep this at 34 or set it to 33
 
     defaultConfig {
         applicationId = "com.example.visionaid"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 33 // Change this to 33
         versionCode = 1
         versionName = "1.0"
 

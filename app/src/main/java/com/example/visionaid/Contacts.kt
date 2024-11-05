@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -31,7 +30,6 @@ class Contacts : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_contacts, container, false)
         contactsListView = view.findViewById(R.id.contact_list)
         checkPermissions()
@@ -44,23 +42,24 @@ class Contacts : Fragment() {
 
         return view
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        // Change the status bar color
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             requireActivity().window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.statusBar)
         }
     }
+
     private fun checkPermissions() {
-        if (ContextCompat.checkSelfPermission(requireContext(), "android.permission.READ_CONTACTS") != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(requireActivity(), arrayOf("android.permission.READ_CONTACTS"), REQUEST_CODE_CONTACT)
+        if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.READ_CONTACTS), REQUEST_CODE_CONTACT)
         } else {
-            loadContacts()  // Load contacts if permission is granted
+            loadContacts()
         }
 
-        if (ContextCompat.checkSelfPermission(requireContext(), "android.permission.CALL_PHONE") != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(requireActivity(), arrayOf("android.permission.CALL_PHONE"), REQUEST_CODE_CALL)
+        // Check CALL_PHONE permission separately
+        if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.CALL_PHONE), REQUEST_CODE_CALL)
         }
     }
 
@@ -73,7 +72,7 @@ class Contacts : Fragment() {
                 }
             }
             REQUEST_CODE_CALL -> {
-                // Handle the CALL_PHONE permission result if needed
+                // Handle CALL_PHONE permission result if needed
             }
         }
     }
@@ -88,32 +87,30 @@ class Contacts : Fragment() {
             ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC"
         )
 
-        if (cursor != null && cursor.count > 0) {
+        if (cursor != null) {
             while (cursor.moveToNext()) {
-                val nameColumnIndex = cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
-                val phoneNumberColumnIndex = cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER)
-
-                val name = cursor.getString(nameColumnIndex)
-                val phoneNumber = cursor.getString(phoneNumberColumnIndex)
+                val name = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
+                val phoneNumber = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER))
                 contactsList.add(name)
                 contactsMap[name] = phoneNumber
             }
             cursor.close()
+        } else {
+            // Handle the case where no contacts are found
         }
-        val showCheckBox=true
-        val adapter = CustomAdapter(requireContext(), contactsList, showCheckBox,
-            onContactCheckedChange = { contactName, isChecked ->
+
+        val showCheckBox = true
+        val adapter = CustomAdapter(requireContext(), contactsList, showCheckBox, onContactCheckedChange = { contactName, isChecked ->
                 val phoneNumber = contactsMap[contactName]
+                // Ensure both values are of type String
                 if (isChecked && phoneNumber != null) {
-                    selectedContacts.add(contactName to phoneNumber)
+                    selectedContacts.add(contactName to phoneNumber) // Both contactName and phoneNumber are String
                 } else {
-                    selectedContacts.remove(contactName to phoneNumber)
+                    selectedContacts.remove(
+                        contactName to (phoneNumber ?: "")
+                    ) // Use "" if phoneNumber is null
                 }
-            },
-            onContactClick = { contactName ->
-                makeCall(contactsMap[contactName])
-            }
-        )
+            }, onContactClick = { contactName -> makeCall(contactsMap[contactName]) })
         contactsListView.adapter = adapter
     }
 
@@ -121,8 +118,10 @@ class Contacts : Fragment() {
         if (phoneNumber != null) {
             val callIntent = Intent(Intent.ACTION_CALL)
             callIntent.data = Uri.parse("tel:$phoneNumber")
-            if (ContextCompat.checkSelfPermission(requireContext(), "android.permission.CALL_PHONE") == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
                 startActivity(callIntent)
+            } else {
+                ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.CALL_PHONE), REQUEST_CODE_CALL)
             }
         }
     }

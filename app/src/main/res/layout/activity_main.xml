@@ -1,28 +1,68 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
 
     <TextureView
         android:id="@+id/textureView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
 
-        <FrameLayout
-            android:id="@+id/contact_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-        </FrameLayout>
+    <ImageView
+        android:id="@+id/capturedImageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter"
+        android:visibility="gone" />
+
+
+    <ImageButton
+        android:id="@+id/back_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="16dp"
+        android:background="?android:selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_close"
+    android:visibility="gone" />
+
+
+    <ImageButton
+        android:id="@+id/capture_button"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="40dp"
+
+        android:src="@drawable/outline_photo_camera_24"
+        android:contentDescription="Capture Image" />
+
+
+    <ImageButton
+        android:id="@+id/menu_button"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="16dp"
+        android:background="?android:selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_menu"
+        android:contentDescription="Menu" />
+
 
     <Button
         android:id="@+id/contact"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="165dp"
-        android:layout_marginBottom="61dp"
-        android:text="Contacts" />
+        android:layout_below="@id/menu_button"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_alignParentStart="true"
+        android:text="Call Contacts"
+        android:visibility="gone" />
+
 </RelativeLayout>
+
